@@ -981,7 +981,10 @@ class TestShardedTensorChunked(ShardedTensorTestBase):
                 sharded_tensor.empty(spec, 10, 20)
 
         spec = ChunkShardingSpec(dim=0, placements=["rank:5/cuda:1"])
-        with self.assertRaisesRegex(ValueError, 'Invalid rank'):
+        with self.assertRaisesRegex(
+            ValueError,
+            "Global rank 5 does not exist in input process group"
+        ):
             sharded_tensor.empty(spec, 10, 20)
 
         spec = ChunkShardingSpec(dim=0, placements=["rank:0/cuda:1"])
@@ -1180,10 +1183,10 @@ class TestShardedTensorChunked(ShardedTensorTestBase):
         spec = ChunkShardingSpec(
             dim=0,
             placements=[
-                "rank:0/cuda:0",
-                "rank:1/cuda:1",
-                "rank:0/cuda:2",
-                "rank:1/cuda:3",
+                "rank:2/cuda:0",
+                "rank:3/cuda:1",
+                "rank:2/cuda:2",
+                "rank:3/cuda:3",
             ],
         )
 
